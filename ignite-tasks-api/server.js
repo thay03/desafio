@@ -7,15 +7,15 @@ app.use(express.json());
 const tasks = [];
 
 app.post('/tasks', (req, res) => {
-    const { title, descripition } = req.body;
+    const { title, description } = req.body;
 
     const task = {
-        id: uuvidv4(),
+        id: uuidv4(),
         title,
-        descripition,
+        description,
         completed_at: null,
         created_at: new Date(),
-        updated_at: new DataTransfer(),
+        updated_at: new Date(),
     };
 
     tasks.push(task);
@@ -24,7 +24,7 @@ app.post('/tasks', (req, res) => {
 
 // fitro para buscar todas as tarefas
 app.get('/tasks',(req, res) => {
-    const {title, descripition} = req.query;
+    const {title, description} = req.query;
 
     let filteredTasks = tasks;
 
@@ -34,9 +34,9 @@ app.get('/tasks',(req, res) => {
         );
     }
     
-    if(descripition){
+    if(description){
         filteredTasks = filteredTasks.filter(task =>
-            task.descripition.includes(descripition));
+            task.description.includes(description));
     }
     return res.json(filteredTasks);
 });
@@ -56,7 +56,7 @@ app.put('/tasks/:id', (req, res) => {
 });
 
 //deletar uma task
-app.delete('/task/:id', (req, res) => {
+app.delete('/tasks/:id', (req, res) => {
     const {id} = req.params;
 
     const index = tasks.findIndex(task => task.id === id);
@@ -67,14 +67,14 @@ app.delete('/task/:id', (req, res) => {
     return res.status(204).send();
 });
 // marca como concluido
-app.patch('/tasks/:id/compete', (req, res) => {
+app.patch('/tasks/:id/complete', (req, res) => {
     const {id} = req.params;
 
     const task = tasks.find(task => task.id === id);
     if (!task)return res.status(404).json({ error: 'task não encontrada'});
 
     task.completed_at = task.completed_at ? null : new Date();
-    task.updated_at = new Data();
+    task.updated_at = new Date();
 
     return res.json(task)
 })
